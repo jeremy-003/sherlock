@@ -17,9 +17,9 @@ var ObjectID = require('mongodb').ObjectID;
 var db;
 
 // Connect to the db
-MongoClient.connect('mongodb://localhost:27017', (err, client) => {
+MongoClient.connect('mongodb://192.168.233.171:27017', (err, client) => {
     if (err) { return console.log(err); }
-db = client.db('sherlock');
+db = client.db('testdb');
 
 // handlers
 
