@@ -107,6 +107,11 @@ app.put('/${model.endpoint}/:_id', (req, res) => {
         );
     });
 
-    app.listen(3000, () => console.log('app started on port 3000'));
+    if (dbConnectionUrl === process.env.MONGODB_URL) {
+        app.listen(8080, () => console.log('app started on port 8080'));
+    } else {
+        app.listen(3000, () => console.log('app started on port 3000'));
+    };
+    
 });
 
