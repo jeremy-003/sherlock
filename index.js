@@ -114,4 +114,3 @@ app.put('/${model.endpoint}/:_id', (req, res) => {
     };
     
 });
-
