@@ -1,0 +1,24 @@
+{
+  "name": "Sherlock",
+  "version": "0.1.0",
+  "description": "MySites Management",
+  "main": "index.js",
+  "scripts": {
+    "startMongo": "mongod",
+    "startBackEnd": "node index.js &"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lehmann314159/app-builder.git"
+  },
+  "author": "Endurance International Group",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "config": "^3.1.0",
+    "express": "^4.16.4",
+    "fs-extra": "^7.0.1",
+    "mongo": "^0.1.0",
+    "validator": "^10.11.0"
+  }
+}
