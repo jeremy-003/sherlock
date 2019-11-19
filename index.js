@@ -4,6 +4,9 @@
 const express = require('express');
 const app = express();
 
+// Adding a const to allow db connection on openshift
+const dbConnectionUrl = process.env.MONGODB_URL || 'mongodb://localhost:27017';
+
 // body-parser handles parsing of request bodies
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
@@ -17,9 +20,9 @@ var ObjectID = require('mongodb').ObjectID;
 var db;
 
 // Connect to the db
-MongoClient.connect('mongodb://192.168.233.171:27017', (err, client) => {
+MongoClient.connect(dbConnectionUrl, (err, client) => {
     if (err) { return console.log(err); }
-db = client.db('testdb');
+db = client.db('sherlock');
 
 // handlers
 
