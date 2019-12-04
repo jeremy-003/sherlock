@@ -20,11 +20,34 @@ MongoClient.connect(dbConnectionUrl, (err, client) => {
     db = client.db('sherlock');
 });
 
+// Validators
+// N.B. loginUrl is not a required field
+function isValidFullMySite(inMySite) {
+    if (!inMySite.hasOwnProperty('siteUrl')) { return false; }
+    if (!inMySite.hasOwnProperty('cmsType')) { return false; }
+    if (!inMySite.hasOwnProperty('dataSource')) { return false; }
+    if (!inMySite.hasOwnProperty('dataTimestamp')) { return false; }
+    if (!inMySite.hasOwnProperty('brand')) { return false; }
+    if (!inMySite.hasOwnProperty('userId')) { return false; }
+    return true;
+}
+
+function isValidPartialMySite(inMySite) {
+    if (inMySite.hasOwnProperty('siteUrl')) { return true; }
+    if (inMySite.hasOwnProperty('cmsType')) { return true; }
+    if (inMySite.hasOwnProperty('dataSource')) { return true; }
+    if (inMySite.hasOwnProperty('dataTimestamp')) { return true; }
+    if (inMySite.hasOwnProperty('brand')) { return true; }
+    if (inMySite.hasOwnProperty('userId')) { return true; }
+    return false;
+}
+
 ///////////////
 // Endpoints //
 ///////////////
 
-// POST - User
+/*
+// POST - User -- deprecated
 app.post('/users', (req, res) => {
     db.collection('user').insertOne(req.body, (err, results) => {
         if (err) {
@@ -34,7 +57,7 @@ app.post('/users', (req, res) => {
         }
 })});
 
-// GET (list) - User
+// GET (list) - User -- deprecated
 app.get('/users', (req, res) => {
     db.collection('user').find({}).toArray((err, results) => {
         if (err) {
@@ -44,7 +67,7 @@ app.get('/users', (req, res) => {
         }
 })});
 
-// GET (detail) - User
+// GET (detail) - User -- deprecated
 app.get('/users/:userId', (req, res) => {
     let filter = {'userId': req.params.userId};
     db.collection('user').findOne(filter, (err, results) => {
@@ -55,7 +78,7 @@ app.get('/users/:userId', (req, res) => {
         }
 })});
 
-// PUT - User
+// PUT - User -- deprecated
 app.put('/users/:userId', (req, res) => {
     let filter = {'userId': req.params.userId};
     let update = {$set: req.body};
@@ -67,7 +90,7 @@ app.put('/users/:userId', (req, res) => {
         }
 })});
 
-// DELETE - User
+// DELETE - User -- deprecated
 app.delete('/users/:userId', (req, res) => {
     let filter = {"userId": req.params.userId};
     db.collection('user').deleteOne(filter, (err, results) => {
@@ -77,12 +100,16 @@ app.delete('/users/:userId', (req, res) => {
             res.json(results);
         }
 })});
-
+*/
 // POST - MySite
 app.post('/mySites', (req, res) => {
+    if (!isValidFullMySite(req.body)) {
+        res.status(400).send();
+        return;
+    }
     db.collection('mySite').insertOne(req.body, (err, results) => {
         if (err) {
-            res.json(err);
+            res.status(500).json(err.message);
         } else {
             res.json(results);
         }
@@ -92,7 +119,7 @@ app.post('/mySites', (req, res) => {
 app.get('/mySites', (req, res) => {
     db.collection('mySite').find({}).toArray((err, results) => {
         if (err) {
-            res.json(err);
+            res.json(err.message);
         } else {
             res.json(results);
         }
@@ -103,7 +130,7 @@ app.get('/mySites/:siteUrl', (req, res) => {
     let filter = {'siteUrl': req.params.siteUrl};
     db.collection('mySite').findOne(filter, (err, results) => {
         if (err) {
-            res.json(err);
+            res.json(err.message);
         } else {
             res.json(results);
         }
@@ -111,11 +138,14 @@ app.get('/mySites/:siteUrl', (req, res) => {
 
 // PUT - MySite
 app.put('/mySites/:siteUrl', (req, res) => {
+    if (!isValidPartialMySite(req)) {
+        res.status(400).send();
+    }
     let filter = {'siteUrl': req.params.siteUrl};
     let update = {$set: req.body};
     db.collection('mySite').updateOne(filter, update, (err, results) => {
         if (err) {
-            res.json(err);
+            res.status(500).json(err.message);
         } else {
             res.json(results);
         }
@@ -126,7 +156,36 @@ app.delete('/mySites/:siteUrl', (req, res) => {
     let filter = {"siteUrl": req.params.siteUrl};
     db.collection('mySite').deleteOne(filter, (err, results) => {
         if (err) {
-            res.json(err);
+            res.status(500).json(err.message);
+        } else {
+            res.json(results);
+        }
+})});
+
+// MySites By UserId + Brand
+// GET (list)
+app.get('/mySitesByUser/:brand/:userId', (req, res) => {
+    let filter = {
+        brand: req.params.brand,
+        userId: req.params.userId
+    };
+    db.collection('mySite').find(filter).toArray((err, results) => {
+        if (err) {
+            res.status(500).json(err.message);
+        } else {
+            res.json(results);
+        }
+})});
+
+// DELETE
+app.delete('/mySitesByUser/:brand/:userId', (req, res) => {
+    let filter = {
+        brand: req.params.brand,
+        userId: req.params.userId
+    };
+    db.collection('mySite').deleteMany(filter, (err, results) => {
+        if (err) {
+            res.status(500).json(err.message);
         } else {
             res.json(results);
         }

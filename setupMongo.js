@@ -2,7 +2,6 @@
 
 // Collections and indices
 var modelIndex = {
-    'user': 'userId',
     'mySite': 'siteUrl'
 };
 // Adding a const to allow db connection on openshift
