@@ -24,14 +24,13 @@ var options = {
 
 // Delete All
 rp(options)
-.catch(err => { console.log('delete: There was a problem: %s', err.statusCode); })
+.catch(err => { console.log("\ndelete: There was a problem: ", err.statusCode); })
 .then(response => {
-	if (response) { console.log('delete response:', response); }
+	if (response) { console.log("\ndelete response:", response); }
 })
 
 // Read all
 .then( () => {
-	console.log('wha?');
 	options = {
 		url: `${nodeServer}/mySitesByUser/${brand}/${userId}`,
 		method: 'GET',
@@ -43,16 +42,13 @@ rp(options)
 	};
 	console.log(options);
 	rp(options)
-	.catch(err => { console.log('readall: There was a problem: %s', err.statusCode); })
+	.catch(err => { console.log("\nreadall: There was a problem: ", err.statusCode); })
 	.then(response => {
 		if (response)
-			{ console.log('readall response:', response);
+			{ console.log('readall after delete response:', response);
 		} else {
 			console.log('readall: no response');
 		}
-	})
-	.finally(() => {
-		console.log('finally it happened to me');
 	})
 })
 
@@ -73,9 +69,9 @@ rp(options)
 		}
 	};
 	rp(options)
-	.catch(err => { console.log('badadd: There was a problem: %s', err.statusCode); })
+	.catch(err => { console.log("\nbad add: There was a problem: ", err.statusCode); })
 	.then(response => {
-		if (response) { console.log('badadd response:', response); }
+		if (response) { console.log("\nbad add response:", response); }
 	})
 })
 
@@ -97,11 +93,10 @@ rp(options)
 	};
 	rp(options)
 	.catch(err => {
-		console.log('good add: There was a problem: %s', err.statusCode);
-		//console.log(err);
+		console.log("\ngood add: There was a problem: ", err.statusCode);
 	})
 	.then(response => {
-		if (response) { console.log('good add response:', response); }
+		if (response) { console.log("\ngood add response: ", response); }
 	})
 
 	// Read all
@@ -116,9 +111,11 @@ rp(options)
 			}
 		};
 		rp(options)
-		.catch(err => { console.log('readall: There was a problem: %s', err.statusCode); })
+		.catch(err => {
+			console.log("\nreadall after good insert: There was a problem: ", err.statusCode);
+		})
 		.then(response => {
-			if (response) { console.log('readall response:', response); }
+			if (response) { console.log("\nreadall after good insert response:", response); }
 		});
 	})
 });

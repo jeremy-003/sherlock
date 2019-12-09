@@ -46,61 +46,6 @@ function isValidPartialMySite(inMySite) {
 // Endpoints //
 ///////////////
 
-/*
-// POST - User -- deprecated
-app.post('/users', (req, res) => {
-    db.collection('user').insertOne(req.body, (err, results) => {
-        if (err) {
-            res.json(err);
-        } else {
-            res.json(results);
-        }
-})});
-
-// GET (list) - User -- deprecated
-app.get('/users', (req, res) => {
-    db.collection('user').find({}).toArray((err, results) => {
-        if (err) {
-            res.json(err);
-        } else {
-            res.json(results);
-        }
-})});
-
-// GET (detail) - User -- deprecated
-app.get('/users/:userId', (req, res) => {
-    let filter = {'userId': req.params.userId};
-    db.collection('user').findOne(filter, (err, results) => {
-        if (err) {
-            res.json(err);
-        } else {
-            res.json(results);
-        }
-})});
-
-// PUT - User -- deprecated
-app.put('/users/:userId', (req, res) => {
-    let filter = {'userId': req.params.userId};
-    let update = {$set: req.body};
-    db.collection('user').updateOne(filter, update, (err, results) => {
-        if (err) {
-            res.json(err);
-        } else {
-            res.json(results);
-        }
-})});
-
-// DELETE - User -- deprecated
-app.delete('/users/:userId', (req, res) => {
-    let filter = {"userId": req.params.userId};
-    db.collection('user').deleteOne(filter, (err, results) => {
-        if (err) {
-            res.json(err);
-        } else {
-            res.json(results);
-        }
-})});
-*/
 // POST - MySite
 app.post('/mySites', (req, res) => {
     if (!isValidFullMySite(req.body)) {
