@@ -141,7 +141,7 @@
           }
         ],
         "postCommit": {
-          "script": "npm tester"
+          "script": "npm test"
         }
       }
     },
