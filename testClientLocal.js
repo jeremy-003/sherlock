@@ -3,16 +3,14 @@ var request = require('request');
 var rp = require('request-promise');
 
 // Environment-specific settings
-const dbConnectionUrl = process.env.MONGODB_URL || 'mongodb://localhost:27017';
-const nodePort = (dbConnectionUrl === process.env.MONGODB_URL) ? 8080 : 3000;
-const nodeServer = `http://localhost:${nodePort}`;
+const nodeServer = 'http://localhost:3000';
 
 // Standards are important
 let brand         = 'bluehosty';
 let userId        = '18018675309';
 let cmsType       = 'WordPress';
-let siteUrl       = 'http://jennsnumber.com/blog';
-let loginUrl      = 'http://jennsnumber.com/blog/wp-admin';
+let siteUrl       = 'jennsnumber.com';
+let loginUrl      = 'jennsnumber.com/wp-admin';
 let dataSource    = 'task';
 let dataTimestamp = new Date().toString();
 

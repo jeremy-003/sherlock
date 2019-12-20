@@ -1,12 +1,13 @@
 {
-  "name": "Sherlock",
+  "name": "sherlock",
   "version": "0.1.0",
   "description": "MySites Management",
   "main": "index.js",
   "scripts": {
     "startMongo": "mongod",
     "start": "node index.js &",
-    "test": "jest"
+    "test": "jest",
+    "tester": "IP=0.0.0.0 PORT=3030 mocha --timeout 5000 tests/*_test.js"
   },
   "repository": {
     "type": "git",
@@ -22,7 +23,12 @@
     "mongo": "^0.1.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.5",
-    "validator": "^10.11.0"
+    "validator": "^10.11.0",
+    "chai": "^3.5.0",
+    "chai-http": "^2.0.1",
+    "mocha": "^2.4.5",
+    "mongodb": "^2.1.16",
+    "morgan": "^1.7.0"
   },
   "devDependencies": {
     "jest": "^24.9.0"

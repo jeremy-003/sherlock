@@ -3,22 +3,70 @@ const express = require('express');
 const app = express();
 
 // Environment-specific values
-const dbConnectionUrl = process.env.MONGODB_URL || 'mongodb://localhost:27017';
-const nodePort = (dbConnectionUrl === process.env.MONGODB_URL) ? 8080 : 3000;
+var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
+    ip   = process.env.IP   || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0',
+    mongoURL = process.env.OPENSHIFT_MONGODB_DB_URL || process.env.MONGO_URL,
+    mongoURLLabel = "";
+
+if (mongoURL == null) {
+    var mongoHost, mongoPort, mongoDatabase, mongoPassword, mongoUser;
+    // Using env vars via service discovery for the Mongo database information
+    if (process.env.DATABASE_SERVICE_NAME) {
+      var mongoServiceName = process.env.DATABASE_SERVICE_NAME.toUpperCase();
+      mongoHost = process.env[mongoServiceName + '_SERVICE_HOST'];
+      mongoPort = process.env[mongoServiceName + '_SERVICE_PORT'];
+      mongoDatabase = process.env[mongoServiceName + '_DATABASE'];
+      mongoPassword = process.env[mongoServiceName + '_PASSWORD'];
+      mongoUser = process.env[mongoServiceName + '_USER'];
+    }
+  
+    if (mongoHost && mongoPort && mongoDatabase) {
+      mongoURLLabel = mongoURL = 'mongodb://';
+      if (mongoUser && mongoPassword) {
+        mongoURL += mongoUser + ':' + mongoPassword + '@';
+      }
+      // Provide UI label that excludes user id and pw
+      mongoURLLabel += mongoHost + ':' + mongoPort + '/' + mongoDatabase;
+      mongoURL += mongoHost + ':' +  mongoPort + '/' + mongoDatabase;
+    }
+  }
+  
+  // This checks to see if mongoURL is still undefined so that we know to use the localhost information
+  if (mongoURL === undefined) {
+    ip = '127.0.0.1'; // used IP instead of localhost because localhost did not work right on my local machine.
+    port = 3000;
+    mongoURLLabel = mongoURL = 'mongodb://localhost:27017/sampledb';
+  }
+
+// Mongo is a document-based database
+// Connect to the db
+var db = null,
+    dbDetails = new Object();
+
+var initDb = function(callback) {
+  if (mongoURL == null) return;
+
+  var mongodb = require('mongodb');
+  if (mongodb == null) return;
+
+  mongodb.connect(mongoURL, function(err, conn) {
+    if (err) {
+      callback(err);
+      return;
+    }
+
+    db = conn;
+    dbDetails.databaseName = db.databaseName;
+    dbDetails.url = mongoURLLabel;
+    dbDetails.type = 'MongoDB';
+
+    console.log('Connected to MongoDB at: %s', mongoURL);
+  });
+};
 
 // body-parser handles parsing of request bodies
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
-
-// Mongo is a document-based database
-var MongoClient = require('mongodb').MongoClient;
-var db;
-
-// Connect to the db
-MongoClient.connect(dbConnectionUrl, (err, client) => {
-    if (err) { throw err; }
-    db = client.db('sherlock');
-});
 
 // Validators
 // N.B. loginUrl is not a required field
@@ -46,6 +94,23 @@ function isValidPartialMySite(inMySite) {
 // Endpoints //
 ///////////////
 
+// Used by the test to verify that app is working
+app.get('/', function (req, res) {
+    // Make sure that the URL is working for the calls
+    res.status(200).json({ message: "Working" });
+});
+
+// error handling
+app.use(function(err, req, res, next){
+    console.error(err.stack);
+    res.status(500).send('Something bad happened!');
+});
+
+initDb(function(err){
+    console.log('Error connecting to Mongo. Message:\n'+err);
+});
+
+// The endpoints that Sherlock will use
 // POST - MySite
 app.post('/mySites', (req, res) => {
     if (!isValidFullMySite(req.body)) {
@@ -137,4 +202,8 @@ app.delete('/mySitesByUser/:brand/:userId', (req, res) => {
 })});
 
 // Spin up
-app.listen(nodePort, () => console.log(`app started on port ${nodePort}`));
+app.listen(port, ip);
+console.log('Server running on http://%s:%s', ip, port);
+
+// This is required, if removed the app will give an error.
+module.exports = app ;
