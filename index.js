@@ -35,7 +35,7 @@ if (mongoURL == null) {
   if (mongoURL === undefined) {
     ip = '127.0.0.1'; // used IP instead of localhost because localhost did not work right on my local machine.
     port = 3000;
-    mongoURLLabel = mongoURL = 'mongodb://localhost:27017/sampledb';
+    mongoURLLabel = mongoURL = 'mongodb://localhost:27017/sherlock';
   }
 
 // Mongo is a document-based database
