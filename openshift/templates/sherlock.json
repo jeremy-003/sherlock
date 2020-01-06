@@ -191,7 +191,7 @@
           "spec": {
             "containers": [
               {
-                "name": "api",
+                "name": "sherlock",
                 "image": " ",
                 "ports": [
                   {
