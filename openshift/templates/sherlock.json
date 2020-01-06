@@ -191,7 +191,7 @@
           "spec": {
             "containers": [
               {
-                "name": "api",
+                "name": "sherlock",
                 "image": " ",
                 "ports": [
                   {
@@ -439,7 +439,7 @@
       "displayName": "Name",
       "description": "The name assigned to all of the frontend objects defined in this template.",
       "required": true,
-      "value": "api"
+      "value": "sherlock"
     },
     {
       "name": "NAMESPACE",
