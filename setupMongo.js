@@ -13,7 +13,7 @@ var MongoClient = require('mongodb').MongoClient;
 // Connect to the db
 MongoClient.connect(dbConnectionUrl, (err, client) => {
     if (err) { throw err; }
-    db = client.db('sherlock');
+    db = client.db('sherlockdb');
 
     // Iterate through the various models and indexes
     Object.keys(modelIndex).forEach(key => {
