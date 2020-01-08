@@ -3,7 +3,7 @@ var request = require('request');
 var rp = require('request-promise');
 
 // Environment-specific settings
-const nodeServer = `http://silly-silly.provo1.endurancedevs.com`;
+const nodeServer = 'http://sherlock-sherlock.provo1.endurancedevs.com';
 
 // Standards are important
 let brand         = 'bluehosty';
