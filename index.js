@@ -33,9 +33,12 @@ if (mongoURL == null) {
 
 // This checks to see if mongoURL is still undefined so that we know to use the localhost information
 if (mongoURL === undefined) {
-  ip = '127.0.0.1'; // used IP instead of localhost because localhost did not work right on my local machine.
-  port = 3000;
-  mongoURLLabel = mongoURL = 'mongodb://localhost:27017/sherlockdb';
+  var dbHost = process.env.DATABASE_HOST || 'localhost';
+  if (dbHost === 'localhost') {
+    ip = '127.0.0.1';
+    port = 3000;
+  }
+  mongoURLLabel = mongoURL = 'mongodb://' + dbHost + ':27017/sherlockdockerdb';
 }
 
 // Mongo is a document-based database
