@@ -38,7 +38,7 @@ if (mongoURL === undefined) {
     ip = '127.0.0.1';
     port = 3000;
   }
-  mongoURLLabel = mongoURL = 'mongodb://' + dbHost + ':27017/sherlockdockerdb';
+  mongoURLLabel = mongoURL = 'mongodb://' + dbHost + ':27017/sherlockdb';
 }
 
 // Mongo is a document-based database
